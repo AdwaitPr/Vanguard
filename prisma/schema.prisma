@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model BOM {
+  id         String      @id @default(uuid())
+  createdAt  DateTime    @default(now())
+  name       String      @default("Untitled BOM")
+  components Component[]
+}
+
+model Component {
+  id           String   @id @default(uuid())
+  bomId        String
+  bom          BOM      @relation(fields: [bomId], references: [id], onDelete: Cascade)
+  partNumber   String
+  quantity     Int
+  reference    String?
+  description  String?
+  stock        Int      @default(0)
+  price        Float    @default(0.0)
+  inStock      Boolean  @default(false)
+  supplier     String?
+}
